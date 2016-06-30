@@ -1,0 +1,22 @@
+{% extends "game/base.html" %}
+
+{% block main_content %}
+
+<div class="panel panel-default">
+    
+    <div class="panel-heading">
+      <div class="col-md-12 text-center">
+      	<h1> {{ current_round }} </h1>
+      </div>
+    </div>
+    
+    <div class="panel-heading">
+      {% for category in categories_list %}
+      <div class="text-center col-md-2"><h4>{{ category.category }}</h4></div> 
+      {% endfor %}
+      <div class="clearfix"></div> 
+    </div>
+
+</div>
+
+{% endblock main_content %}

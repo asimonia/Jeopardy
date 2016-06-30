@@ -1,0 +1,23 @@
+{% extends "game/base.html" %}
+
+{% block main_content %}
+
+<form action="{% url 'date' '1985-01-02' %}" method="post">
+	{% csrf_token %}
+
+	<h1>Select an air date from the menu</h1>
+	
+	{% if air_date_list %}
+		<select>
+			{% for air_date in air_date_list %}
+				<option value='{{ air_date.air_date }}'>{{ air_date.air_date }}</option>
+			{% endfor %}
+		</select>
+	{% else %}
+		<p>There are no air dates</p>
+	{% endif %}
+	<input type="submit" value="Start" />
+
+</form>
+
+{% endblock main_content %}
