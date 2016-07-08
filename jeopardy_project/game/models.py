@@ -6,6 +6,7 @@ ROUNDS = [
 	(1, 'Jeopardy!'),
 	(2, 'Double Jeopardy!'),
 	(3, 'Final Jeopardy!'),
+	(4, 'Tiebreaker'),
 ]
 
 # Create your models here.
