@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'game'
+    'game',
+    'pipeline',
+    'rest_framework'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -123,11 +125,54 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_PATH = os.path.join(BASE_DIR,'static')
+# collect static --> takes everything in static dirs and moves it into static path
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    STATIC_PATH,
-)
+# like finding templates
+STATICFILES_DIRS = ()
+
+# Django Pipeline setup
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_FINDERS = ('django.contrib.staticfiles.finders.FileSystemFinder',
+                        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+                        'pipeline.finders.PipelineFinder')
+
+# Configure object how django pipeline works
+# add more js files in 'source_filenames' for both bootstrap and js
+PIPELINE = {
+   'PIPELINE_ENABLED': True,
+   'JAVASCRIPT': {
+       'mysite_js': {
+           'source_filenames': (
+               'js/bower_components/jquery/dist/jquery.min.js',
+               'js/bower_components/react/JSXTransformer.js',
+               'js/bower_components/react/react-with-addons.js',
+               'js/app.browserify.js',
+           ),
+           'output_filename': 'js/mysite_js.js',
+       }
+   },
+   'STYLESHEETS' : {
+       'mysite_css': {
+           'source_filenames': (
+               'css/style.css',
+           ),
+           'output_filename': 'css/mysite_css.css',
+       },
+   }
+}
+
+# add a key to the dict above
+PIPELINE['COMPILERS'] = ('pipeline_browserify.compiler.BrowserifyCompiler',)
+
+if DEBUG:
+    PIPELINE['BROWSERIFY_ARGUMENTS'] = '-t bablify'
+
+# no CSS compression
+# package - lowercase
+PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.NoopCompressor'
+
+PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 

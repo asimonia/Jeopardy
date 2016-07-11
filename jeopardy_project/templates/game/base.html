@@ -1,3 +1,4 @@
+{% load pipeline %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,78 +11,25 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <!-- React scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.0/react.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.0/react-dom.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <!--loads CSS -->
+    {% stylesheet 'mysite_css' %}
   </head>
 
   <body>
 
-  {% include 'game/header.html' %}
+    {% include 'game/header.html' %}
 
-  <div class="container">
-    <div class="content">
-      {% block main_content %}
-      {% endblock %}
-   </div>
-  </div>
+    <div class="container">
+      <div class="content">
+        {% block main_content %}
+        {% endblock %}
+     </div>
+    </div>
 
-  {% include 'game/footer.html' %}
+    {% include 'game/footer.html' %}
 
-  <script type="text/babel">
-    var DynamicSearch = React.createClass({
-
-      // sets initial state
-      getInitialState: function(){
-        return { searchString: '' };
-      },
-
-      // sets state, triggers render method
-      handleChange: function(event){
-        // grab value form input box
-        this.setState({searchString:event.target.value});
-        console.log("scope updated!");
-      },
-
-      render: function() {
-
-        var showDates = this.props.items;
-        var searchString = this.state.searchString.trim().toLowerCase();
-
-        // filter showDates list by value from input box
-        if(searchString.length > 0){
-          showDates = showDates.filter(function(show){
-            return show.name.toLowerCase().match( searchString );
-          });
-        }
-
-        return (
-          <div>
-            <input type="text" value={this.state.searchString} onChange={this.handleChange} placeholder="Search!" />
-            <ul>
-              { showDates.map(function(show){ return <li>{show.name} </li> }) }
-            </ul>
-          </div>
-        )
-      }
-
-    });
-
-    // list of showDates, defined with JavaScript object literals
-    var showDates = [
-      {"name": "1984-01-20"}, {"name": "1985-02-20"}, {"name": "1999-01-20"}, {"name": "2000-02-25"}
-    ];
-
-    ReactDOM.render(
-      <DynamicSearch items={ showDates } />,
-      document.getElementById('main')
-    );
-
-  </script>
-
-
+    <!--loads JS -->
+    {% javascript 'mysite_js' %}
   </body>
   
 </html>
